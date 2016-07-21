@@ -3,17 +3,17 @@
 >template_shape >{"h": 3240, "w": 2414}
 
 # Machine Readable Zones ########################################
->MRZ-1>>>{"y": 692, "x": 160, "w": 1040, "h": 272}>>>address
->MRZ-2>>>{"y": 695, "x": 1286, "w": 1126, "h": 285}>>>notice_type
->MRZ-3>>>{"y": 606, "x": 686, "w": 379, "h": 72}>>>page_number
->MRZ-4>>>{"y": 609, "x": 156, "w": 463, "h": 52}>>>notice_date
->MRZ-6>>>{"y": 629, "x": 1237, "w": 714, "h": 52}>>>beneficiary_name
->MRZ-8>>>{"y": 503, "x": 1228, "w": 759, "h": 69}>>>petitioner
->MRZ-9>>>{"y": 455, "x": 668, "w": 472, "h": 58}>>>priority_date
->MRZ-10>>>{"y": 453, "x": 126, "w": 510, "h": 52}>>>received_date
->MRZ-11>>>{"y": 346, "x": 152, "w": 1026, "h": 67}>>>receipt_number
->MRZ-12>>>{"y": 320, "x": 1410, "w": 1050, "h": 90}>>>*I129 PETITION FOR A NONIMMIGRANT WORKER
->MRZ-13>>>{"y": 537, "x": 1427, "w": 417, "h": 51}>>>beneficiary_id
+>MRZ-1>>>{"y": 643, "x": 146,   "w": 1040, "h": 264}>>>address
+>MRZ-2>>>{"y": 640, "x": 1258,  "w": 1006, "h": 259}>>>notice_type
+>MRZ-3>>>{"y": 559, "x": 662,   "w": 456,  "h": 52}>>>page_number
+>MRZ-4>>>{"y": 557, "x": 136,   "w": 436,  "h": 58}>>>notice_date
+>MRZ-6>>>{"y": 582, "x": 1201,  "w": 493,  "h": 47}>>>beneficiary_name
+>MRZ-8>>>{"y": 463, "x": 1210,  "w": 588,  "h": 61}>>>petitioner
+>MRZ-9>>>{"y": 455, "x": 668,   "w": 472,  "h": 58}>>>priority_date
+>MRZ-10>>>{"y": 453, "x": 126,  "w": 510,  "h": 52}>>>received_date
+>MRZ-11>>>{"y": 346, "x": 152,  "w": 1026, "h": 67}>>>receipt_number
+>MRZ-12>>>{"y": 320, "x": 1386, "w": 1012, "h": 83}>>>*I129 PETITION FOR A NONIMMIGRANT WORKER
+>MRZ-13>>>{"y": 537, "x": 1427, "w": 417,  "h": 51}>>>beneficiary_id
 >MRZ-14>>>{"y": 320, "x": 1386, "w": 1012, "h": 83}>>>case_type
->MRZ-15>>>{"y": 990, "x": 136, "w": 2257, "h": 1717}>>>body
+>MRZ-15>>>{"y": 990, "x": 136,  "w": 2257, "h": 1717}>>>body
 

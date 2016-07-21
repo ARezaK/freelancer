@@ -1,12 +1,10 @@
 import logging
-import re
 import os
 import csv
 import subprocess
-from PIL import ImageGrab, Image
+from PIL import Image
 from pprint import pprint
 from Levenshtein import ratio as lratio
-from difflib import SequenceMatcher
 from sys import platform as _platform
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
@@ -22,7 +20,7 @@ def get_regions_to_process():
     Read the regions file and returns the name and coordinates of the regions regions.
     """
     regions = [] # list of tuples. First item in tuple is name of region, second is coordinates(y,x,width,height)
-    with open('regions/regions.txt') as f:
+    with open('regions/regions_provided_by_employer.txt') as f:
         for line in f.readlines():
             if 'MRZ' not in line:
                 continue
@@ -31,12 +29,12 @@ def get_regions_to_process():
     return regions
 
 
-regions = get_regions_to_process() # [('address', [635, 150, 1040, 272]), ('notice_type', [660, 1215, 1126, 285]),.... ]
+regions = get_regions_to_process()  # [('address', [635, 150, 1040, 272]), ('notice_type', [660, 1215, 1126, 285]),.... ]
 
 
-class Pdf():
+class Pdf:
     """
-    create csv file when instaiting the pdf
+    create csv file when instantiting the pdf
     each tab is a page(image)
     each row is a region and then then extracted text for that region
     """
@@ -65,43 +63,41 @@ class Pdf():
         Takes a pdf filename in pdf folder and extracts an image for each page in the pdf
         """
         print("converting pdf: %s to images " % self.pdf_file_name)
-        process = subprocess.Popen('convert -verbose -density 300 -trim %s -quality 100 -depth 8 -sharpen 0x1.0 pdfs/images/%s.png' % (self.location, self.pdf_file_name) , shell=True)
+        process = subprocess.Popen('convert -verbose -density 400 -trim %s -adaptive-resize "3240x2414!" -quality 100 -depth 15 -sharpen 0x0.5 pdfs/images/%s.png' % (self.location, self.pdf_file_name) , shell=True)
         process.communicate()
         print("done extracting images from  pdf: %s" % self.pdf_file_name)
 
     def clean_up_images(self):
         images = os.listdir('pdfs/images')
-        for image_nu, image_ in enumerate(images):
+        for image_num, image_ in enumerate(images):
             print("cleaning up image: %s" % image_)
             if self.pdf_file_name in image_: # all extracted images have the pdf name in the image
                 with open('pdfs/images/' + image_, 'rb') as f:
                     process = subprocess.Popen('textcleaner -g -e normalize -f 30 -o 12 -s 2 pdfs/images/%s pdfs/images/%s' % (image_, image_) , shell=True)
                     process.communicate()
 
-
-
     def find_pictures_to_process(self, regions):
         """
         Iterate through images for this pdf and find the image that has the region with *, then call parse_regions_for_this_file 
         """
         images = os.listdir('pdfs/images')
-        for image_nu, image_ in enumerate(images):
+        for image_num, image_ in enumerate(images):
             print("image_: ", image_)
-            if self.pdf_file_name in image_: # all extracted images have the pdf name in the image
+            if self.pdf_file_name in image_:  # all extracted images have the pdf name in the image
                 with open('pdfs/images/' + image_, 'rb') as f:
                     im = Image.open(f)
                     for region in regions:
                         print("region: ", region)
-                        if '*' not in region[0]:  # want to make sure that we ocr the correct page first so we look for the region that defines that page
+                        if '*' not in region[0]:   # want to make sure that we ocr the correct page first so we look for the region that defines that page
                             continue
                         saveable_region_name = region[0][1:].replace(" ", "_")  # get a saveable region name
                         im = im.crop((region[1][1], region[1][0], region[1][1] + region[1][2], region[1][0] + region[1][3]))
-                        im.save('temp_files/' + saveable_region_name + '.jpg')
-                        ocr('temp_files/' + saveable_region_name + '.jpg')
+                        im.save('temp_files/' + saveable_region_name + '.png')
+                        ocr(    'temp_files/' + saveable_region_name + '.png')
 
                         region_name = str(region[0].replace("*", ""))
                         tess_output = str(read_tesseract_output())
-                        ratio = lratio(region_name, tess_output)  # get the levenshtein ratio between the two text, b/c ocr is not perfect
+                        ratio = lratio(region_name, tess_output)   # get the levenshtein ratio between the two text, b/c ocr is not perfect
                         print(region_name)
                         print(tess_output)
                         print(ratio)
@@ -125,8 +121,8 @@ class Pdf():
                 saveable_region_name = region[0].replace(" ", "_")  # get a saveable region name
                 print(saveable_region_name)
                 im = im.crop((region[1][1], region[1][0], region[1][1] + region[1][2], region[1][0] + region[1][3]))
-                im.save('temp_files/' + saveable_region_name + '.jpg')
-                ocr(    'temp_files/' + saveable_region_name + '.jpg')
+                im.save('temp_files/' + saveable_region_name + '.png')
+                ocr(    'temp_files/' + saveable_region_name + '.png')
 
                 tess_output = str(read_tesseract_output())
                 print(tess_output)
@@ -145,7 +141,7 @@ class Pdf():
                 os.remove(image_)
 
     def move_this_pdf_to_processed(self):
-        os.rename(image_, 'processed_pdfs')
+        os.rename(self.location, 'processed_pdfs')
 
 
 def ocr(image):
@@ -159,8 +155,6 @@ def ocr(image):
         process = subprocess.Popen(['tesseract.exe', image, 'temp_files/tesseract_output'])
     process.communicate()
 
-    
-
 
 def read_tesseract_output():
     b = open('temp_files/tesseract_output.txt', 'r')
@@ -170,24 +164,9 @@ def read_tesseract_output():
     return output
 
 
-
-
-
-"""
-files_to_process = os.listdir('processed_images')
-logging.info("images to ocr through: %s" % files_to_process)
-
-for file_ in files_to_process:
-    if determine_if_this_is_the_picture_to_process(file_, regions):
-        parse_regions_for_this_file(file_, regions)
-        quit()
-    else:
-        continue
-"""
-
 class MyHandler(FileSystemEventHandler):
     def on_created(self, event):
-        print("pdf has entereted directory: %s" % event.src_path)
+        print("pdf has entered directory: %s" % event.src_path)
         added_pdf = Pdf(event.src_path)
         added_pdf.create_csv(regions)
         added_pdf.convert_pdf_to_series_of_images()
