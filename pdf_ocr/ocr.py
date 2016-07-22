@@ -167,6 +167,9 @@ def read_tesseract_output():
 class MyHandler(FileSystemEventHandler):
     def on_created(self, event):
         print("pdf has entered directory: %s" % event.src_path)
+        if '.pdf' not in event.src_path:
+            print("not pdf")
+            return
         added_pdf = Pdf(event.src_path)
         added_pdf.create_csv(regions)
         added_pdf.convert_pdf_to_series_of_images()
