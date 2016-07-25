@@ -1,0 +1,13 @@
+>template_name >i129
+>template_shape >{"h": 3300, "w": 2550}
+
+# OCR Zones ########################################
+>MRZ-1>>>{"y": 623, "x": 1229, "w": 902, "h": 63}>>>beneficiary
+>MRZ-2>>>{"y": 492, "x": 1224, "w": 1006, "h": 92}>>>petitioner
+>MRZ-3>>>{"y": 392, "x": 1391, "w": 984, "h": 96}>>>casetype
+>MRZ-4>>>{"y": 620, "x": 725, "w": 289, "h": 58}>>>page_no
+>MRZ-5>>>{"y": 618, "x": 237, "w": 447, "h": 56}>>>notice_date
+>MRZ-6>>>{"y": 518, "x": 226, "w": 466, "h": 60}>>>received_date
+>MRZ-7>>>{"y": 516, "x": 726, "w": 460, "h": 58}>>>priority_date
+>MRZ-8>>>{"y": 698, "x": 1230, "w": 810, "h": 529}>>>notice_type
+>MRZ-9>>>{"y": 392, "x": 1391, "w": 984, "h": 96}>>>*I129 PETITION FOR A NONIMMIGRANT WORKER
