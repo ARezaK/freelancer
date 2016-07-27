@@ -157,13 +157,13 @@ class Pdf:
         for image_num, image_ in enumerate(images):
             print("image_: ", image_)
             if self.pdf_file_name in image_:  # since all extracted images have the pdf name in the image
-                os.remove(image_)
+                os.remove('pdfs/images/' + image_)
 
     def move_this_pdf_to_processed(self):
         """
         Move the pdf to processed pdfs
         """
-        os.rename(self.location, 'processed_pdfs')
+        os.rename(self.location, 'processed_pdfs/%s' % self.pdf_file_name)
 
 
 def ocr(image):
